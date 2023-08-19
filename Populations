@@ -1,0 +1,564 @@
+##############  Bibliotecas ##############
+library(tictoc)
+library(ggplot2)
+library(viridis)
+
+##############  Funções Criadas ##########
+ScaleandBack=function(X,nmi,nsig){
+  
+  mi=mean(X)
+  sig=sd(X)
+  
+  Aux=X-mi
+  
+  Aux=Aux/sig
+  
+  Aux=Aux*nsig
+  
+  Aux=Aux+nmi
+  
+  return(Aux)
+  
+}
+
+##############  Criação dos Boards ##########
+A=sample(1:10,60000,replace=T)
+M1=matrix(A,300,200)
+
+A=1:10
+M2=matrix(A,300,200, byrow=T)
+
+A=1:200
+M3=matrix(A,300,200, byrow=T)
+
+A=1:10
+M4=matrix(A,300,200)
+
+A=1:300
+M5=matrix(A,300,200)
+
+M7=matrix(1,300,200)
+A=rep(1:24,300)
+for(i in (2:nrow(M7))){
+  M7[i,]=M7[i,]+A[i]
+}
+A=rep(1:24,200)
+for(i in (2:ncol(M7))){
+  M7[,i]=M7[,i]+A[i]
+}
+
+
+M8=matrix(1,300,200)
+for(i in (2:nrow(M8))){
+  M8[i,]=M8[i,]+i
+}
+for(i in (2:ncol(M8))){
+  M8[,i]=M8[,i]+i
+}
+
+
+M9=matrix(1,300,200)
+for(i in (2:150)){
+  M9[i,]=M9[i,]+i
+}
+for(i in (151:300)){
+  M9[i,]=M9[i,]+(301-i)
+}
+
+for(i in (2:100)){
+  M9[,i]=M9[,i]+i
+}
+for(i in (101:200)){
+  M9[,i]=M9[,i]+(201-i)
+}
+
+
+M6=matrix(1,300,200)
+A=rep(c(1:6,6:1),300)
+for(i in (2:300)){
+  M6[i,]=M6[i,]+A[i]
+}
+A=rep(c(1:6,6:1),200)
+for(i in (2:200)){
+  M6[,i]=M6[,i]+A[i]
+}
+
+
+M0=matrix(300,300,200)
+for(i in (2:150)){
+  M0[i,]=M0[i,]-i
+}
+for(i in (151:300)){
+  M0[i,]=M0[i,]-(301-i)
+}
+
+for(i in (2:100)){
+  M0[,i]=M0[,i]-i
+}
+for(i in (101:200)){
+  M0[,i]=M0[,i]-(201-i)
+}
+
+M11=matrix(1,300,200)
+A=rep(c(6:1,1:6),300)
+for(i in (2:300)){
+  M11[i,]=M11[i,]+A[i]
+}
+A=rep(c(6:1,1:6),200)
+for(i in (2:200)){
+  M11[,i]=M11[,i]+A[i]
+}
+
+N1=matrix(1,300,200)
+for(i in 1:300){
+  for(j in 1:200){
+    N1[i,j]=N1[i,j]+abs(round((i/3)-(j/2),0))
+  }
+}
+
+
+N2=matrix(1,300,200)
+for(i in (2:75)){
+  N2[i,]=N2[i,]+i
+}
+for(i in (76:175)){
+  N2[i,]=N2[i,]+(176-i)
+}
+for(i in (125:225)){
+  N2[i,]=N2[i,]+i-125
+}
+for(i in (226:300)){
+  N2[i,]=N2[i,]+(301-i)
+}
+for(i in (2:100)){
+  N2[,i]=N2[,i]+i
+}
+for(i in (101:200)){
+  N2[,i]=N2[,i]+(201-i)
+}
+
+
+N3=matrix(1,300,200)
+for(i in (2:75)){
+  N3[i,101:200]=N3[i,101:200]+i
+}
+for(i in (76:150)){
+  N3[i,101:200]=N3[i,101:200]+(151-i)
+}
+for(i in (151:225)){
+  N3[i,1:100]=N3[i,1:100]+i-151
+}
+for(i in (226:300)){
+  N3[i,1:100]=N3[i,1:100]+(301-i)
+}
+
+for(j in (1:50)){
+  N3[151:300,j]=N3[151:300,j]+j
+}
+for(j in (51:100)){
+  N3[151:300,j]=N3[151:300,j]+(100-j)
+}
+for(j in (101:150)){
+  N3[2:150,j]=N3[2:150,j]+j-101
+}
+for(j in (151:200)){
+  N3[2:150,j]=N3[2:150,j]+(200-j)
+}
+
+
+N4=matrix(100,300,200)
+for(i in 1:300){
+  for(j in 1:200){
+    N4[i,j]=N4[i,j]-abs(round((i/3)-(j/2),0))
+  }
+}
+
+
+N5=matrix(100,300,200)
+for(i in (2:75)){
+  N5[i,]=N5[i,]-i
+}
+for(i in (76:175)){
+  N5[i,]=N5[i,]-(176-i)
+}
+for(i in (125:225)){
+  N5[i,]=N5[i,]-i+125
+}
+for(i in (226:300)){
+  N5[i,]=N5[i,]-(301-i)
+}
+for(i in (2:100)){
+  N5[,i]=N5[,i]-i
+}
+for(i in (101:200)){
+  N5[,i]=N5[,i]-(201-i)
+}
+
+
+N6=matrix(100,300,200)
+for(i in (2:75)){
+  N6[i,101:200]=N6[i,101:200]-i
+}
+for(i in (76:150)){
+  N6[i,101:200]=N6[i,101:200]-(151-i)
+}
+for(i in (151:225)){
+  N6[i,1:100]=N6[i,1:100]-i+151
+}
+for(i in (226:300)){
+  N6[i,1:100]=N6[i,1:100]-(301-i)
+}
+
+for(j in (1:50)){
+  N6[151:300,j]=N6[151:300,j]-j
+}
+for(j in (51:100)){
+  N6[151:300,j]=N6[151:300,j]-(100-j)
+}
+for(j in (101:150)){
+  N6[2:150,j]=N6[2:150,j]-j+101
+}
+for(j in (151:200)){
+  N6[2:150,j]=N6[2:150,j]-(200-j)
+}
+
+
+N7=matrix(1,300,200)
+for(i in (2:50)){
+  N7[i,125:200]=N7[i,125:200]+i
+}
+for(i in (51:100)){
+  N7[i,125:200]=N7[i,125:200]+(101-i)
+}
+for(i in (201:250)){
+  N7[i,1:75]=N7[i,1:75]+i-201
+}
+for(i in (251:300)){
+  N7[i,1:75]=N7[i,1:75]+(301-i)
+}
+
+for(j in (1:37)){
+  N7[201:300,j]=N7[201:300,j]+j
+}
+for(j in (38:75)){
+  N7[201:300,j]=N7[201:300,j]+(75-j)
+}
+for(j in (125:162)){
+  N7[2:100,j]=N7[2:100,j]+j-125
+}
+for(j in (163:200)){
+  N7[2:100,j]=N7[2:100,j]+(200-j)
+}
+
+
+N8=matrix(100,300,200)
+for(i in (2:50)){
+  N8[i,125:200]=N8[i,125:200]-i
+}
+for(i in (51:100)){
+  N8[i,125:200]=N8[i,125:200]-(101-i)
+}
+for(i in (201:250)){
+  N8[i,1:75]=N8[i,1:75]-i+201
+}
+for(i in (251:300)){
+  N8[i,1:75]=N8[i,1:75]-(301-i)
+}
+
+for(j in (1:37)){
+  N8[201:300,j]=N8[201:300,j]-j
+}
+for(j in (38:75)){
+  N8[201:300,j]=N8[201:300,j]-(75-j)
+}
+for(j in (125:162)){
+  N8[2:100,j]=N8[2:100,j]-j+125
+}
+for(j in (163:200)){
+  N8[2:100,j]=N8[2:100,j]-(200-j)
+}
+
+AAA=matrix(1,300,200)
+for(i in 1:300){
+  for(j in 1:200){
+    AAA[i,j]=AAA[i,j]-abs(round((i/3)-(j/2),0))
+  }
+}
+
+BBB=matrix(1,300,200)
+for(i in 1:300){
+  for(j in 1:200){
+    BBB[i,j]=BBB[i,j]+abs(round((i/3)-(j/2),0))
+  }
+}
+
+O1=AAA[,200:1]+BBB
+O2=AAA[,200:1]+AAA
+O3=BBB[,200:1]+BBB
+O4=M3+M5+N1
+
+Ma=Mb=matrix(1,300,200)
+for(i in (2:150)){
+  Ma[i,]=Ma[i,]+i
+}
+for(i in (151:300)){
+  Ma[i,]=Ma[i,]+(301-i)
+}
+
+for(i in (2:100)){
+  Mb[,i]=Mb[,i]+i
+}
+for(i in (101:200)){
+  Mb[,i]=Mb[,i]+(201-i)
+}
+
+A=c(seq(1,50, length.out=length(1:75)),
+    seq(50,1, length.out=length(76:112)),
+    seq(1,50, length.out=length(113:150)),
+    seq(50,1, length.out=length(151:187)),
+    seq(1,50, length.out=length(188:225)),
+    seq(50,1, length.out=length(226:300)))
+
+Mc=matrix(A,300,200)
+
+A=c(seq(1,50, length.out=length(1:75)),
+    seq(50,1, length.out=length(76:112)),
+    seq(1,100, length.out=length(113:150)),
+    seq(100,1, length.out=length(151:187)),
+    seq(1,50, length.out=length(188:225)),
+    seq(50,1, length.out=length(226:300)))
+
+Md=matrix(A,300,200)
+
+A=c(seq(1,50, length.out=length(1:50)),
+    seq(50,1, length.out=length(51:75)),
+    seq(1,50, length.out=length(76:100)),
+    seq(50,1, length.out=length(101:125)),
+    seq(1,50, length.out=length(126:150)),
+    seq(50,1, length.out=length(151:200)))
+
+Me=matrix(A,300,200, byrow=T)
+
+A=c(seq(1,50, length.out=length(1:50)),
+    seq(50,1, length.out=length(51:75)),
+    seq(1,100, length.out=length(76:100)),
+    seq(100,1, length.out=length(101:125)),
+    seq(1,50, length.out=length(126:150)),
+    seq(50,1, length.out=length(151:200)))
+
+Mf=matrix(A,300,200, byrow=T)
+
+
+Ma=Mb=matrix(1,300,200)
+for(i in (2:150)){
+  Ma[i,]=Ma[i,]+i
+}
+for(i in (151:300)){
+  Ma[i,]=Ma[i,]+(301-i)
+}
+
+for(i in (2:100)){
+  Mb[,i]=Mb[,i]+i
+}
+for(i in (101:200)){
+  Mb[,i]=Mb[,i]+(201-i)
+}
+
+
+Na=Nb=matrix(300,300,200)
+for(i in (2:150)){
+  Na[i,]=Na[i,]-i
+}
+for(i in (151:300)){
+  Na[i,]=Na[i,]-(301-i)
+}
+
+for(i in (2:100)){
+  Nb[,i]=Nb[,i]-i
+}
+for(i in (101:200)){
+  Nb[,i]=Nb[,i]-(201-i)
+}
+
+A=c(seq(50,1, length.out=length(1:75)),
+    seq(1,50, length.out=length(76:112)),
+    seq(50,1, length.out=length(113:150)),
+    seq(1,50, length.out=length(151:187)),
+    seq(50,1, length.out=length(188:225)),
+    seq(1,50, length.out=length(226:300)))
+
+Nc=matrix(A,300,200)
+
+A=c(seq(100,50, length.out=length(1:75)),
+    seq(50,100, length.out=length(76:112)),
+    seq(100,1, length.out=length(113:150)),
+    seq(1,100, length.out=length(151:187)),
+    seq(100,50, length.out=length(188:225)),
+    seq(50,100, length.out=length(226:300)))
+
+Nd=matrix(A,300,200)
+
+A=c(seq(50,1, length.out=length(1:50)),
+    seq(1,50, length.out=length(51:75)),
+    seq(50,1, length.out=length(76:100)),
+    seq(1,50, length.out=length(101:125)),
+    seq(50,1, length.out=length(126:150)),
+    seq(1,50, length.out=length(151:200)))
+
+Ne=matrix(A,300,200, byrow=T)
+
+A=c(seq(100,50, length.out=length(1:50)),
+    seq(50,100, length.out=length(51:75)),
+    seq(100,1, length.out=length(76:100)),
+    seq(1,100, length.out=length(101:125)),
+    seq(100,50, length.out=length(126:150)),
+    seq(50,100, length.out=length(151:200)))
+
+Nf=matrix(A,300,200, byrow=T)
+
+Mg=Md+Mf
+Ng=Nd+Nf
+
+MM1=M2+M4
+
+A=1:25
+M12=matrix(A,300,200, byrow=T)
+A=1:25
+M13=matrix(A,300,200)
+MM2=M13+M12
+
+A1=ScaleandBack(M1, 100,10)
+A2=ScaleandBack(M2, 100,10)
+A3=ScaleandBack(M3, 100,10)
+A4=ScaleandBack(M4, 100,10)
+A5=ScaleandBack(M5, 100,10)
+A7=ScaleandBack(M7, 100,10)
+A8=ScaleandBack(M8, 100,10)
+A6=ScaleandBack(M6, 100,10)
+A9=ScaleandBack(M9, 100,10)
+A0=ScaleandBack(M0, 100,10)
+A11=ScaleandBack(M11, 100,10)
+A21=ScaleandBack(N1, 100,10)
+A22=ScaleandBack(N4, 100,10)
+A23=ScaleandBack(N2, 100,10)
+A24=ScaleandBack(N5, 100,10)
+A25=ScaleandBack(N3, 100,10)
+A26=ScaleandBack(N6, 100,10)
+A27=ScaleandBack(N7, 100,10)
+A28=ScaleandBack(N8, 100,10)
+A29=ScaleandBack(O1, 100,10)
+A30=ScaleandBack(O2, 100,10)
+A31=ScaleandBack(O3, 100,10)
+A32=ScaleandBack(O4, 100,10)
+A33=ScaleandBack(Ma, 100,10)
+A34=ScaleandBack(Mb, 100,10)
+A35=ScaleandBack(Mc, 100,10)
+A36=ScaleandBack(Md, 100,10)
+A37=ScaleandBack(Me, 100,10)
+A38=ScaleandBack(Mf, 100,10)
+A39=ScaleandBack(Mg, 100,10)
+A40=ScaleandBack(Na, 100,10)
+A41=ScaleandBack(Nb, 100,10)
+A42=ScaleandBack(Nc, 100,10)
+A43=ScaleandBack(Nd, 100,10)
+A44=ScaleandBack(Ne, 100,10)
+A45=ScaleandBack(Nf, 100,10)
+A46=ScaleandBack(Ng, 100,10)
+A47=ScaleandBack(MM1, 100,10)
+A48=ScaleandBack(MM2, 100,10)
+A49=ScaleandBack(M12, 100,10)
+A50=ScaleandBack(M13, 100,10)
+
+
+A1=A1+rnorm(60000,0,5)
+A2=A2+rnorm(60000,0,5)
+A3=A3+rnorm(60000,0,5)
+A4=A4+rnorm(60000,0,5)
+A5=A5+rnorm(60000,0,5)
+A7=A7+rnorm(60000,0,5)
+A8=A8+rnorm(60000,0,5)
+A6=A6+rnorm(60000,0,5)
+A9=A9+rnorm(60000,0,5)
+A0=A0+rnorm(60000,0,5)
+A11=A11+rnorm(60000,0,5)
+A21=A21+rnorm(60000,0,5)
+A22=A22+rnorm(60000,0,5)
+A23=A23+rnorm(60000,0,5)
+A24=A24+rnorm(60000,0,5)
+A25=A25+rnorm(60000,0,5)
+A26=A26+rnorm(60000,0,5)
+A27=A27+rnorm(60000,0,5)
+A28=A28+rnorm(60000,0,5)
+A29=A29+rnorm(60000,0,5)
+A30=A30+rnorm(60000,0,5)
+A31=A31+rnorm(60000,0,5)
+A32=A32+rnorm(60000,0,5)
+A33=A33+rnorm(60000,0,5)
+A34=A34+rnorm(60000,0,5)
+A35=A35+rnorm(60000,0,5)
+A36=A36+rnorm(60000,0,5)
+A37=A37+rnorm(60000,0,5)
+A38=A38+rnorm(60000,0,5)
+A39=A39+rnorm(60000,0,5)
+A40=A40+rnorm(60000,0,5)
+A41=A41+rnorm(60000,0,5)
+A42=A42+rnorm(60000,0,5)
+A43=A43+rnorm(60000,0,5)
+A44=A44+rnorm(60000,0,5)
+A45=A45+rnorm(60000,0,5)
+A46=A46+rnorm(60000,0,5)
+A47=A47+rnorm(60000,0,5)
+A48=A48+rnorm(60000,0,5)
+A49=A49+rnorm(60000,0,5)
+A50=A50+rnorm(60000,0,5)
+
+
+ListaMatrizes=list(
+                   "Crescente Total Colunas"=A3,
+                   "Crescente Total Linhas"=A5,
+                   "Diagonal Total"=A8,
+                   "Diagonais Refletidas"=A29,
+                   "Setas"=A32,
+                   
+                   "Periodico Curto V"=A2,
+                   "Periodico Curto H"=A4,
+                   "Periodico Curto D"=A47,
+                   "Periodico Longo V"=A49,
+                   "Periodico Longo H"=A50,
+                   "Periodico Longo D"=A48,
+                   
+                   
+                   "Crescente ao Centro Total"=A9,
+                   "Crescente ao Centro Diagonal"=A30,
+                   "Crescente as Pontas"=A21,
+                   "Clusters Positivos com Intersecção"=A23,
+                   "Clusters Positivos sem Intersecção"=A25,
+                   "Crescente ao Centro H"=A33,
+                   
+                   "Decrescente ao Centro Total"=A0,
+                   "Decrescente ao Centro Diagonal"=A31,
+                   "Decrescente as Pontas"=A22,
+                   "Clusters Negativos com Intersecção"=A24,
+                   "Clusters Negativos sem Intersecção"=A26,
+                   "Decrescente ao Centro H"=A40,
+
+                   "Crescente ao Centro V"=A34,
+                   "Crescente Tri Igual H"=A35,
+                   "Crescente Tri Desigual H"=A36,
+                   "Crescente Tri Igual V"=A37,
+                   "Crescente Tri Desigual V"=A38,
+                   "Crescente Tri Desigual VH"=A39,
+                   
+                   "Decrescente ao Centro V"=A41,
+                   "Decrescente Tri Igual H"=A42,
+                   "Decrescente Tri Desigual H"=A43,
+                   "Decrescente Tri Igual V"=A44,
+                   "Decrescente Tri Desigual V"=A45,
+                   "Decrescente Tri Desigual VH"=A46)
+
+rm(M1,M2,M3,M4,M5,M7,M8,M6,M9,M11,M0,A,i,A1,A2,A3,A4,A5,A7,A8,A6,A9,A11,A0,
+   N1,N2,N3,N4,N5,N7,N8,N6,j,A21,A22,A23,A24,A25,A27,A28,A26,
+   O1,O2,O3,O4,AAA,BBB,A29,A30,A31,
+   Ma,Mb,Mc,Md,Me,Mf,Mg,Na,Nb,Nc,Nd,Ne,Nf,Ng,A32,A33,A34,A35,A36,A37,A38,A39,A40,A41,A42,A43,A44,A45,A46,
+   MM1,MM2,M12,M13,A47,A48,A49,A50)
+
