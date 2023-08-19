@@ -513,7 +513,7 @@ A49=A49+rnorm(60000,0,5)
 A50=A50+rnorm(60000,0,5)
 
 
-ListaMatrizes=list(
+ListaMatrizes=list("Aleatorio"=A1,
                    "Crescente Total Colunas"=A3,
                    "Crescente Total Linhas"=A5,
                    "Diagonal Total"=A8,
