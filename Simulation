@@ -1,0 +1,457 @@
+library(binaryLogic)
+library(tictoc)
+
+##########################
+MortonGen=function(Matriz){
+  
+  Tam=dim(Matriz)
+  N=prod(Tam)
+  
+  tammax=length(as.binary(max(Tam)))
+  
+  TESTE=matrix(NA,Tam[1],Tam[2])
+  colnames(TESTE)=0:(Tam[2]-1)
+  rownames(TESTE)=0:(Tam[1]-1)  
+  
+  for(i in 1:Tam[1]){
+     
+    xindex=fillUpToBit(as.binary(i-1),tammax)
+    
+    for(j in 1:Tam[2]){
+      
+      yindex=fillUpToBit(as.binary(j-1),tammax)
+      
+      index=c(xindex,yindex)[order(rep(1:tammax,2))]
+      ugh=sum(2^((length(index)-1):0)*index)
+      
+      TESTE[i,j]=ugh
+    }
+  }
+  
+  TESTE=matrix(rank(as.vector(TESTE)),Tam[1],Tam[2])
+  
+  return(TESTE)
+  
+}
+GrayGen=function(Matriz){
+  
+  Tam=dim(Matriz)
+  N=prod(Tam)
+  
+  tammax=length(as.binary(max(Tam)))
+  
+  TESTE=matrix(NA,Tam[1],Tam[2])
+  colnames(TESTE)=0:(Tam[2]-1)
+  rownames(TESTE)=0:(Tam[1]-1)  
+  
+  for(i in 1:Tam[1]){
+
+    xindex=bin2gray(fillUpToBit(as.binary(i-1),tammax))+0
+    
+    for(j in 1:Tam[2]){
+
+      yindex=bin2gray(fillUpToBit(as.binary(j-1),tammax))+0
+      
+      index=c(xindex,yindex)[order(rep(1:tammax,2))]
+      index=as.numeric(gray2bin(index==T))
+      ugh=sum(2^((length(index)-1):0)*index)
+      
+      TESTE[i,j]=ugh
+    }
+  }
+  
+  TESTE=matrix(rank(as.vector(TESTE)),Tam[1],Tam[2])
+  
+  return(TESTE)
+  
+}
+HilbertGen=function(Matriz){
+  
+  Tam=dim(Matriz)
+  N=prod(Tam)
+  
+  tammax=length(as.binary(max(Tam)))
+  if(tammax%%2!=0){
+    tammax=tammax+1
+  }
+  
+  TESTE=matrix(NA,Tam[1],Tam[2])
+  colnames(TESTE)=0:(Tam[2]-1)
+  rownames(TESTE)=0:(Tam[1]-1)  
+  
+  SubType=matrix(c(2,1,1,4,
+                   1,2,2,3,
+                   4,3,3,2,
+                   3,4,4,1),4,4,byrow = T)
+  
+  LocationX=matrix(c(0,0,1,1,
+                     0,1,1,0,
+                     1,1,0,0,
+                     1,0,0,1),4,4,byrow = T)
+  
+  LocationY=matrix(c(0,1,1,0,
+                     0,0,1,1,
+                     1,0,0,1,
+                     1,1,0,0),4,4,byrow = T)
+  
+  colnames(SubType)=colnames(LocationX)=colnames(LocationY)=c("00","01","10","11")
+  rownames(SubType)=rownames(LocationX)=rownames(LocationY)=1:4
+  
+  for(i in 1:Tam[1]){
+    xindex=fillUpToBit(as.binary(i-1),tammax)
+    for(j in 1:Tam[2]){
+      
+
+      yindex=fillUpToBit(as.binary(j-1),tammax)
+      
+      tipo=1
+      
+      Hmm=rep(NA,tammax)
+      
+      for(A in 1:tammax){
+        
+        x=xindex[A]
+        y=yindex[A]
+        
+        Index=names(which(LocationX[tipo,]==as.numeric(x) & LocationY[tipo,]==as.numeric(y)))
+        
+        Hmm[A]=Index
+        
+        tipo=SubType[tipo,colnames(SubType)==Index]
+      }
+      
+      Aux=as.numeric(strsplit(paste(Hmm, collapse = ""),split="")[[1]])
+      ugh=sum(2^((length(Aux)-1):0)*Aux)
+      
+      TESTE[i,j]=ugh
+      
+    }
+  }
+  
+  
+  TESTE=matrix(rank(as.vector(TESTE)),Tam[1],Tam[2])
+  
+  return(TESTE)
+  
+}
+colunas=function(Matriz){
+  Tam=dim(Matriz)
+  
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  for(i in 1:prod(Tam)){
+    Aux[i]=i
+  }
+  
+  return(Aux)
+  
+}
+linhas=function(Matriz){
+  Tam=dim(Matriz)
+  
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  for(i in 1:prod(Tam)){
+    Aux[i]=i
+  }
+  
+  return(t(Aux))
+  
+}
+spiral=function(Matriz){
+  Tam=dim(Matriz)
+  
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  top=1
+  bottom=Tam[1]
+  left=1
+  right=Tam[2]
+  
+  Val=1
+  
+  while(Val<=prod(Tam)){
+    
+    for(i in left:right){
+      
+      Aux[top,i]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    top=top+1
+    if(Val>prod(Tam)){break}
+    for(i in top:bottom){
+      
+      Aux[i,right]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    right=right-1  
+    if(Val>prod(Tam)){break}
+    for(i in right:left){
+      
+      Aux[bottom,i]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    bottom=bottom-1  
+    if(Val>prod(Tam)){break}
+    for(i in bottom:top){
+      
+      Aux[i,left]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    left=left+1
+    if(Val>prod(Tam)){break}
+  }
+  
+  
+  return(Aux)
+  
+  
+  
+}
+spiralspun=function(Matriz){
+  
+  Tam=dim(Matriz)
+  
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  top=1
+  bottom=Tam[1]
+  left=1
+  right=Tam[2]
+  
+  Val=1
+  
+  while(Val<=prod(Tam)){
+    
+    for(i in top:bottom){
+      Aux[i,left]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    left=left+1
+    if(Val>prod(Tam)){break}
+    for(i in left:right){
+      
+      Aux[bottom,i]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    bottom=bottom-1
+    if(Val>prod(Tam)){break}
+    
+    for(i in bottom:top){
+      
+      Aux[i,right]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    right=right-1
+    if(Val>prod(Tam)){break}
+    
+    for(i in right:left){
+      
+      Aux[top,i]=Val
+      Val=Val+1
+      if(Val>prod(Tam)){break}
+    }
+    top=top+1
+    if(Val>prod(Tam)){break}
+  }
+  return(Aux)
+}
+snakeline=function(Matriz){
+  Tam=dim(Matriz)
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  ida=1:Tam[2]
+  volta=Tam[2]:1
+  auxida=ida
+  auxvolta=volta
+  Flag=0
+  lind=1
+  
+  while(lind<=Tam[1]){
+    
+    if(Flag==0){
+      Aux[lind,]=auxida
+      lind=lind+1
+      auxvolta=auxvolta+Tam[1]
+      auxida=auxida+Tam[1]
+      Flag=1
+    }else{
+      Aux[lind,]=auxvolta
+      lind=lind+1
+      auxida=auxida+Tam[1]
+      auxvolta=auxvolta+Tam[1]
+      Flag=0
+    }
+    
+  }
+  
+  return(Aux)
+  
+}
+snakecol=function(Matriz){
+  Tam=dim(Matriz)
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  ida=1:Tam[1]
+  volta=Tam[1]:1
+  auxida=ida
+  auxvolta=volta
+  Flag=0
+  cind=1
+  
+  while(cind<=Tam[2]){
+    
+    if(Flag==0){
+      Aux[,cind]=auxida
+      cind=cind+1
+      auxvolta=auxvolta+Tam[2]
+      auxida=auxida+Tam[2]
+      Flag=1
+    }else{
+      Aux[,cind]=auxvolta
+      cind=cind+1
+      auxida=auxida+Tam[2]
+      auxvolta=auxvolta+Tam[2]
+      Flag=0
+    }
+    
+  }
+  
+  return(Aux)
+  
+}
+diagonal=function(Matriz){
+  Tam=dim(Matriz)
+  
+  Aux=matrix(NA,Tam[1],Tam[2])
+  
+  contador=1
+  
+  for(i in 1:Tam[1]){
+    coluna=1
+    linha=i
+    
+    while(linha>=1 & coluna<=Tam[2]){
+      Aux[linha,coluna]=contador
+      contador=contador+1
+      coluna=coluna+1
+      linha=linha-1
+    }
+  }
+  
+  for(i in 2:(Tam[1])){
+    linha=Tam[1]
+    coluna=i
+    
+    while(linha>=1 & coluna<=Tam[2]){
+      Aux[linha,coluna]=contador
+      contador=contador+1
+      coluna=coluna+1
+      linha=linha-1
+    }
+  }
+  
+  return(t(Aux))
+  
+}
+
+
+Vectorizing=function(Matriz,Curva){
+  Vetor=rep(NA,prod(dim(Matriz)))
+  
+  for(i in 1:prod(dim(Matriz))){
+    Vetor[i]=Matriz[which.min(Curva)]
+    Curva[which.min(Curva)]=NA
+  }
+  
+  return(Vetor)
+  
+}
+ASis=function(n,N){
+  k=ceiling(N/n)
+  J=sample(1:k, 1, replace = F)
+  Amostra=seq(J,N,by=k)
+  return(Amostra)
+}
+##########################
+
+ListaCurvas=list("colunas"=colunas(ListaMatrizes[[1]]),
+                 "linhas"=linhas(ListaMatrizes[[1]]),
+                 "snakecol"=snakecol(ListaMatrizes[[1]]),
+                 "snakeline"=snakeline(ListaMatrizes[[1]]),
+                 "diagonal"=diagonal(ListaMatrizes[[1]]),
+                 "diagonaltrans"=t(diagonal(ListaMatrizes[[1]])),
+                 "spiral"=spiral(ListaMatrizes[[1]]),
+                 "spiralspun"=spiralspun(ListaMatrizes[[1]]),
+                 "Morton"=MortonGen(ListaMatrizes[[1]]),
+                 "MorTon"=t(MortonGen(ListaMatrizes[[1]])),
+                 "Gray"=GrayGen(ListaMatrizes[[1]]),
+                 "GrayT"=t(GrayGen(ListaMatrizes[[1]])),
+                 "Hilbert"=HilbertGen(ListaMatrizes[[1]]),
+                 "HilberT"=t(HilbertGen(ListaMatrizes[[1]])))
+
+##########################
+heatmap(ListaCurvas[[1]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[2]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[3]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[4]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[5]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[6]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[7]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[8]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[9]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[10]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[11]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[12]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[13]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+heatmap(ListaCurvas[[14]],Rowv = NA, Colv = NA,revC = T,scale = "none")
+
+##########################
+Aux=matrix(1:60000,nrow=300,ncol=200)
+FlatDF=cbind.data.frame("colunas"=Vectorizing(Aux, ListaCurvas[[1]]),
+                        "linhas"=Vectorizing(Aux, ListaCurvas[[2]]),
+                        "snakecol"=Vectorizing(Aux, ListaCurvas[[3]]),
+                        "snakeline"=Vectorizing(Aux, ListaCurvas[[4]]),
+                        "diagonal"=Vectorizing(Aux, ListaCurvas[[5]]),
+                        "diagonaltrans"=Vectorizing(Aux, ListaCurvas[[6]]),
+                        "spiral"=Vectorizing(Aux, ListaCurvas[[7]]),
+                        "spiralspun"=Vectorizing(Aux, ListaCurvas[[8]]),
+                        "Morton"=Vectorizing(Aux, ListaCurvas[[9]]),
+                        "MorTon"=Vectorizing(Aux, ListaCurvas[[10]]),
+                        "Gray"=Vectorizing(Aux, ListaCurvas[[11]]),
+                        "GrayT"=Vectorizing(Aux, ListaCurvas[[12]]),
+                        "Hilbert"=Vectorizing(Aux, ListaCurvas[[13]]),
+                        "HilberT"=Vectorizing(Aux, ListaCurvas[[14]]))
+rm(Aux, ListaCurvas)
+##########################
+A=100000
+
+y=ya=array(NA, c(36,14,A), list(names(ListaMatrizes),
+                             names(FlatDF),
+                             1:A))
+
+for(ccont in 1:14){
+#  print(ccont)
+tic()  
+  for (pcont in 1:36) {
+#    print(paste(pcont))
+    
+    for(i in 1:A){
+      y[pcont,ccont,i]=mean(ListaMatrizes[[pcont]][FlatDF[ASis(600,60000),ccont]])
+      ya[pcont,ccont,i]=mean(ListaMatrizes[[pcont]][FlatDF[sample(1:60000,600,replace = F),ccont]])
+
+    }
+  }
+toc()
+}
+
+(Medias=apply(y,1:2,mean))
+(Desvios=apply(y,1:2,sd))
+(Desvia=apply(ya,1:2,sd))
